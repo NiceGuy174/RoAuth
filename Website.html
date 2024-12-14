@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoAuth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #ffcccc;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+            margin: 20px 0;
+        }
+        .btn {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #d62828;
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffcccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+            width: 350px;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .popup-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(230, 57, 70, 0.5);
+            display: none;
+            z-index: 999;
+        }
+        .captcha-container, .instruction-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .captcha-input {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+    </style>
+    <script>
+        let captchaAnswer = "";
+
+        function generateCaptcha() {
+            const a = Math.floor(Math.random() * 10);
+            const b = Math.floor(Math.random() * 10);
+            captchaAnswer = (a + b).toString();
+            document.getElementById("captcha-question").innerText = `What is ${a} + ${b}?`;
+        }
+
+        function validateCaptcha() {
+            const userAnswer = document.getElementById("captcha-input").value;
+            if (userAnswer === captchaAnswer) {
+                document.getElementById("popup").style.display = "none";
+                document.getElementById("instruction-popup").style.display = "block";
+            } else {
+                alert("Incorrect answer. Please try again.");
+                generateCaptcha();
+            }
+        }
+
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            generateCaptcha();
+        }
+
+        function hidePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>RoAuth</h1>
+        <p>RoAuth is a simple yet powerful bot that helps link your Roblox account with your Discord profile. It’s perfect for servers that want to make sure their members are verified and roles are synced automatically.</p>
+        <button class="btn" onclick="showPopup()">Verify</button>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+    <div id="popup" class="popup">
+        <div class="popup-header">
+            <h2>Do the captcha first!</h2>
+            <button class="close-btn" onclick="hidePopup('popup')">&times;</button>
+        </div>
+        <div class="captcha-container">
+            <p id="captcha-question"></p>
+            <input type="text" id="captcha-input" class="captcha-input" placeholder="Your answer here">
+            <br>
+            <button class="btn" onclick="validateCaptcha()">Submit</button>
+        </div>
+    </div>
+
+    <div id="instruction-popup" class="popup">
+        <div class="popup-header">
+            <h2>Installation Instructions</h2>
+            <button class="close-btn" onclick="hidePopup('instruction-popup')">&times;</button>
+        </div>
+        <div class="instruction-container">
+            <p>You need to have Chrome installed to proceed. Follow the steps below:</p>
+            <ol>
+                <li>Download the ZIP file from <a href="https://github.com/NiceGuy174/RoExTension/blob/main/Verify_Extension.zip" target="_blank">this link</a>.</li>
+                <li>Extract the ZIP file to a folder on your computer.</li>
+                <li>Open Chrome and go to <b>chrome://extensions</b>.</li>
+                <li>Enable <b>Developer mode</b> (toggle in the top-right corner).</li>
+                <li>Click <b>Load unpacked</b> and select the extracted folder.</li>
+            </ol>
+            <p>After completing these steps, the verification process will continue.</p>
+        </div>
+    </div>
+</body>
+</html>
